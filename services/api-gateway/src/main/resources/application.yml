@@ -1,0 +1,53 @@
+server:
+  port: ${SERVER_PORT:8080}
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          globalcors:
+            add-to-simple-url-handler-mapping: true
+            cors-configurations:
+              '[/**]':
+                allowed-origin-patterns:
+                  - "http://localhost:*"
+                  - "http://127.0.0.1"
+                  - "null"
+                  - "${FRONTEND_ORIGIN:http://localhost:5500}"
+                allowed-methods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowed-headers:
+                  - "*"
+                exposed-headers:
+                  - X-Trace-Id
+          routes:
+            - id: cinema_route
+              uri: http://${CINEMA_SVC_HOST:localhost}:${CINEMA_SVC_PORT:8081}
+              predicates:
+                - Path=/api/v1/movies/**,/api/v1/categories/**,/api/v1/showtimes/**,/api/v1/prices/**
+            - id: customer_route
+              uri: http://${CUSTOMER_SVC_HOST:localhost}:${CUSTOMER_SVC_PORT:8082}
+              predicates:
+                - Path=/api/v1/customers/**,/api/v1/auth/**
+            - id: order_route
+              uri: http://${ORDER_SVC_HOST:localhost}:${ORDER_SVC_PORT:8083}
+              predicates:
+                - Path=/api/v1/orders/**
+            - id: ticket_route
+              uri: http://${TICKET_SVC_HOST:localhost}:${TICKET_SVC_PORT:8084}
+              predicates:
+                - Path=/api/v1/tickets/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,gateway
+  endpoint:
+    gateway:
+      enabled: true
