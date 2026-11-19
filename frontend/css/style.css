@@ -1,0 +1,93 @@
+/* ==================== BASE & TYPOGRAPHY ==================== */
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #10141B;
+  color: #FFFFFF;
+}
+
+body.theme-home {
+  background-color: #0A0D12;
+}
+
+body.theme-payment {
+  background-color: #0B0D13;
+}
+
+body.theme-default {
+  background-color: #10141B;
+}
+
+/* ==================== GRADIENTS ==================== */
+.btn-login-gradient {
+  background: linear-gradient(99deg, #F87171 0%, #DC2626 100%);
+}
+
+.btn-login-gradient:hover {
+  filter: brightness(1.08);
+}
+
+.btn-date-active {
+  background: linear-gradient(103deg, #F87171 0%, #DC2626 100%);
+}
+
+.hero-overlay-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 13, 18, 0.9) 0%,
+    rgba(10, 13, 18, 0) 42%,
+    rgba(10, 13, 18, 0.95) 100%
+  );
+}
+
+.backdrop-gradient-right {
+  background: linear-gradient(270deg, #10141B 0%, rgba(16, 20, 27, 0) 100%);
+}
+
+.backdrop-gradient-left {
+  background: linear-gradient(90deg, #10141B 0%, rgba(16, 20, 27, 0) 100%);
+}
+
+/* ==================== SHADOWS & CARDS ==================== */
+.ncc-card-shadow {
+  box-shadow: 0px 12px 24px -8px rgba(0, 0, 0, 0.25);
+}
+
+.price-card-shadow {
+  box-shadow: 0px 12px 24px 0px rgba(0, 0, 0, 0.20);
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .table-tablet-glow {
+    box-shadow: 0px 8px 24px 0px rgba(239, 68, 68, 0.20);
+  }
+}
+
+/* ==================== INTERACTIONS & ANIMATIONS ==================== */
+.movie-card:hover .movie-poster {
+  transform: scale(1.04);
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pop {
+  animation: popIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==================== SCROLLBAR ==================== */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

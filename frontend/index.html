@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trung tâm Chiếu phim Quốc gia - NCC</title>
+
+  <!-- Google Fonts: Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN & Cấu hình bảng màu chuẩn Figma -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            'ncc-bg': '#10141B',
+            'ncc-home': '#0A0D12',
+            'ncc-dark': '#0B0D13',
+            'ncc-card': '#11151C',
+            'ncc-surface': '#1A1D23',
+            'ncc-red': '#EF4444',
+            'ncc-red-dark': '#DC2626',
+            'ncc-yellow': '#EAB308',
+            'ncc-orange': '#F97316',
+            'ncc-muted': '#94A3B8',
+            'ncc-gray': '#6B7280',
+            'ncc-border': '#1E293B',
+            'ncc-border-gray': '#374151',
+            'seat-regular': '#27272A',
+            'seat-vip': '#F97316',
+            'seat-selected': '#2563EB',
+            'seat-couple': '#DC2626',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Custom CSS dùng chung -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="bg-ncc-bg text-white antialiased selection:bg-ncc-red selection:text-white min-h-screen flex flex-col">
+
+  <!-- ==================== HEADER DÙNG CHUNG ==================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-16 lg:h-20 bg-[#10141B]/60 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-[1440px] mx-auto h-full px-4 lg:px-[80px] flex items-center justify-between">
+
+      <!-- Logo & Brand Text (Tablet/Mobile) / Nav (Desktop) -->
+      <div class="flex items-center gap-3 lg:gap-12">
+        <a href="#home" class="flex items-center gap-3 flex-shrink-0">
+          <!-- Thay src bằng logo export từ Figma: ./images/logo-ncc.png -->
+          <img src="https://placehold.co/70x50/10141B/EF4444?text=NCC" alt="NCC Logo"
+            class="w-[56px] h-[40px] lg:w-[70px] lg:h-[50px] object-contain rounded" />
+          <div class="flex flex-col lg:hidden">
+            <span class="text-white text-xs font-semibold leading-4">TRUNG TÂM CHIẾU PHIM QUỐC GIA</span>
+            <span class="text-white text-xs font-semibold leading-4">National Cinema Center</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav id="desktopNav" class="hidden lg:flex items-center gap-8 xl:gap-10 text-base font-normal leading-6">
+          <a href="#home" data-route="home" class="nav-link text-white hover:text-ncc-red transition-colors">Trang
+            chủ</a>
+          <a href="#calendar" data-route="calendar"
+            class="nav-link text-white hover:text-ncc-red transition-colors">Lịch chiếu</a>
+          <a href="javascript:void(0)" onclick="showComingSoonNotice('Tin tức')"
+            class="text-white hover:text-ncc-red transition-colors">Tin tức</a>
+          <a href="javascript:void(0)" onclick="showComingSoonNotice('Khuyến mãi')"
+            class="text-white hover:text-ncc-red transition-colors">Khuyến mãi</a>
+          <a href="#ticket-price" data-route="ticket-price"
+            class="nav-link text-white hover:text-ncc-red transition-colors">Giá vé</a>
+          <a href="javascript:void(0)" onclick="showComingSoonNotice('Liên hoan phim')"
+            class="text-white hover:text-ncc-red transition-colors">Liên hoan phim</a>
+        </nav>
+      </div>
+
+      <!-- Desktop Auth Buttons -->
+      <div class="hidden lg:flex items-center gap-4">
+        <button onclick="openAuthModal('register')"
+          class="h-10 px-8 py-2.5 rounded-full border border-white text-white text-sm font-medium leading-5 flex items-center justify-center hover:bg-white/10 transition">
+          Đăng ký
+        </button>
+        <button onclick="openAuthModal('login')"
+          class="h-10 px-8 py-2.5 btn-login-gradient rounded-full text-red-50 text-sm font-medium leading-5 flex items-center justify-center transition shadow-lg shadow-red-600/20">
+          Đăng nhập
+        </button>
+      </div>
+
+      <!-- Tablet & Mobile Hamburger Menu -->
+      <button id="mobileMenuBtn" aria-label="Mở menu" class="lg:hidden p-1.5 text-white hover:text-ncc-red transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile / Tablet Dropdown Menu -->
+    <div id="mobileMenu"
+      class="hidden lg:hidden bg-[#10141B]/95 backdrop-blur-lg border-b border-white/10 px-6 py-5 space-y-4">
+      <nav id="mobileNav" class="flex flex-col space-y-3 text-base">
+        <a href="#home" data-route="home" class="nav-link text-white hover:text-ncc-red">Trang chủ</a>
+        <a href="#calendar" data-route="calendar" class="nav-link text-white hover:text-ncc-red">Lịch chiếu</a>
+        <a href="javascript:void(0)" onclick="showComingSoonNotice('Tin tức')" class="text-white hover:text-ncc-red">Tin
+          tức</a>
+        <a href="javascript:void(0)" onclick="showComingSoonNotice('Khuyến mãi')"
+          class="text-white hover:text-ncc-red">Khuyến mãi</a>
+        <a href="#ticket-price" data-route="ticket-price" class="nav-link text-white hover:text-ncc-red">Giá vé</a>
+        <a href="javascript:void(0)" onclick="showComingSoonNotice('Liên hoan phim')"
+          class="text-white hover:text-ncc-red">Liên hoan phim</a>
+      </nav>
+      <div class="flex gap-3 pt-2">
+        <button onclick="openAuthModal('register')"
+          class="flex-1 h-10 rounded-full border border-white text-sm font-medium">Đăng ký</button>
+        <button onclick="openAuthModal('login')"
+          class="flex-1 h-10 btn-login-gradient rounded-full text-sm font-medium">Đăng nhập</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== VÙNG HIỂN THỊ NỘI DUNG 7 MÀN HÌNH ==================== -->
+  <main id="app" class="flex-1 w-full"></main>
+
+  <!-- ==================== FOOTER DÙNG CHUNG ==================== -->
+  <footer class="w-full bg-ncc-dark border-t border-white/5 py-10 px-4">
+    <div class="max-w-[1440px] mx-auto flex flex-col items-center">
+
+      <nav
+        class="flex flex-wrap justify-center items-center gap-x-8 gap-y-3 md:gap-10 text-base font-normal leading-6 text-white mb-8">
+        <a href="javascript:void(0)" onclick="showComingSoonNotice('Chính sách')"
+          class="hover:text-ncc-red transition-colors">Chính sách</a>
+        <a href="#calendar" class="hover:text-ncc-red transition-colors">Lịch chiếu</a>
+        <a href="javascript:void(0)" onclick="showComingSoonNotice('Tin tức')"
+          class="hover:text-ncc-red transition-colors">Tin tức</a>
+        <a href="#ticket-price" class="hover:text-ncc-red transition-colors">Giá vé</a>
+        <a href="javascript:void(0)" onclick="showComingSoonNotice('Hỏi đáp')"
+          class="hover:text-ncc-red transition-colors">Hỏi đáp</a>
+        <a href="javascript:void(0)" onclick="showComingSoonNotice('Liên hệ')"
+          class="hover:text-ncc-red transition-colors">Liên hệ</a>
+      </nav>
+
+      <div class="flex flex-col md:flex-row justify-center items-center gap-6 mb-8">
+        <div class="flex items-center gap-6 md:mr-2">
+          <a href="javascript:void(0)" aria-label="Facebook"
+            class="w-[30px] h-[30px] rounded-sm bg-[#1877F2] flex items-center justify-center text-white hover:opacity-85 transition">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path
+                d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z" />
+            </svg>
+          </a>
+          <a href="javascript:void(0)" aria-label="Zalo"
+            class="w-[30px] h-[30px] rounded-sm bg-[#0068FF] flex items-center justify-center text-white text-[10px] font-bold hover:opacity-85 transition">
+            Zalo
+          </a>
+          <a href="javascript:void(0)" aria-label="YouTube"
+            class="w-[30px] h-[30px] rounded-sm bg-[#FF0000] flex items-center justify-center text-white hover:opacity-85 transition">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path
+                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="flex flex-wrap justify-center items-center gap-4">
+          <a href="javascript:void(0)"><img src="https://placehold.co/140x43/161b26/ffffff?text=Google+Play"
+              alt="Google Play" class="w-[114px] md:w-[140px] h-auto object-contain rounded" /></a>
+          <a href="javascript:void(0)"><img src="https://placehold.co/130x44/161b26/ffffff?text=App+Store"
+              alt="App Store" class="w-[106px] md:w-[130px] h-auto object-contain rounded" /></a>
+          <a href="javascript:void(0)"><img src="https://placehold.co/130x49/161b26/38bdf8?text=Bo+Cong+Thuong"
+              alt="Bộ Công Thương" class="w-[106px] md:w-[130px] h-auto object-contain rounded" /></a>
+        </div>
+      </div>
+
+      <div class="max-w-[740px] text-center text-sm md:text-base font-normal leading-6 text-white/90 space-y-2">
+        <p>Cơ quan chủ quản: BỘ VĂN HÓA, THỂ THAO VÀ DU LỊCH</p>
+        <p>Bản quyền thuộc Trung tâm Chiếu phim Quốc gia.</p>
+        <p>Giấy phép số: 224/GP- TTĐT ngày 31/8/2010 - Chịu trách nhiệm: Vũ Đức Tùng – Giám đốc.</p>
+        <p>Địa chỉ: 87 Láng Hạ, Quận Ba Đình, Tp. Hà Nội - Điện thoại: 024.35141791</p>
+        <p class="pt-1 flex items-center justify-center gap-1.5 text-white/80">
+          <span>&copy;</span>
+          <span>2023 By NCC - All rights reserved.</span>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL: ĐĂNG NHẬP / ĐĂNG KÝ ==================== -->
+  <div id="authModal"
+    class="hidden fixed inset-0 z-[100] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="relative w-full max-w-md bg-[#10141B] border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl">
+      <button onclick="closeModal('authModal')"
+        class="absolute top-4 right-5 text-gray-400 hover:text-white text-2xl">&times;</button>
+      <h3 id="authModalTitle" class="text-2xl font-bold text-white mb-6">Đăng nhập</h3>
+      <form
+        onsubmit="event.preventDefault(); showToast('Thao tác thành công (Demo Frontend)!'); closeModal('authModal');"
+        class="space-y-4">
+        <div id="registerNameField" class="hidden">
+          <label class="block text-sm text-gray-300 mb-1.5">Họ và tên</label>
+          <input type="text" placeholder="Nhập họ tên"
+            class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-300 mb-1.5">Email</label>
+          <input type="email" required placeholder="email@example.com"
+            class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-300 mb-1.5">Mật khẩu</label>
+          <input type="password" required placeholder="••••••••"
+            class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
+        </div>
+        <button type="submit" id="authSubmitBtn"
+          class="w-full h-11 btn-login-gradient rounded-full text-sm font-semibold text-white mt-2">
+          Đăng nhập
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: CHI TIẾT NỘI DUNG PHIM ==================== -->
+  <div id="contentModal"
+    class="hidden fixed inset-0 z-[100] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="relative w-full max-w-xl bg-[#1A1D23] border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl">
+      <button onclick="closeModal('contentModal')"
+        class="absolute top-4 right-5 text-gray-400 hover:text-white text-2xl">&times;</button>
+      <h3 class="text-xl font-bold text-white mb-4">Chi tiết nội dung</h3>
+      <p id="fullSynopsisText" class="text-sm leading-6 text-gray-200"></p>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: XEM TRAILER ==================== -->
+  <div id="trailerModal"
+    class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="relative w-full max-w-3xl bg-[#10141B] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="flex items-center justify-between px-5 py-3.5 border-b border-white/10">
+        <h3 id="trailerTitle" class="text-base font-bold text-white">Trailer</h3>
+        <button onclick="closeModal('trailerModal')"
+          class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <div class="aspect-video w-full bg-black flex items-center justify-center">
+        <iframe id="trailerIframe" class="w-full h-full" src="" title="Movie Trailer" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST THÔNG BÁO NHẸ ==================== -->
+  <div id="toastNotice"
+    class="hidden fixed bottom-6 right-6 z-[110] bg-[#1A1D23] border border-white/15 text-white text-sm px-5 py-3 rounded-xl shadow-2xl">
+  </div>
+
+  <!-- Scripts (Nạp data trước, app sau - chạy tốt cả khi mở file trực tiếp) -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
