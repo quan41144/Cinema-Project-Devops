@@ -11,10 +11,11 @@ spring:
             add-to-simple-url-handler-mapping: true
             cors-configurations:
               '[/**]':
-                allowed-origin-patterns:
+                allowedOriginPatterns:
                   - "http://localhost:*"
-                  - "http://127.0.0.1"
+                  - "http://127.0.0.1:*"
                   - "null"
+                  - "https://${DOMAIN_NAME:localhost}"
                   - "${FRONTEND_ORIGIN:http://localhost:5500}"
                 allowed-methods:
                   - GET

@@ -46,6 +46,10 @@ tasks.named('jar') {
     enabled = false
 }
 
+tasks.named('bootJar') {
+    archiveFileName = 'api-gateway.jar'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

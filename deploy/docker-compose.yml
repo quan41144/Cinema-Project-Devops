@@ -1,0 +1,190 @@
+services:
+  cinema-db:
+    image: postgres:15-alpine
+    container_name: cinemabox-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456}
+    volumes:
+      - cinema-db-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - cinema-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  cinema-service:
+    build:
+      context: ../services/cinema-service
+      dockerfile: Dockerfile
+    container_name: cinemabox-cinema
+    expose:
+      - "8081"
+    environment:
+      SERVER_PORT: 8081
+      DB_HOST: cinema-db
+      DB_PORT: 5432
+      DB_NAME: ${SHOWTIME_DB_NAME:-cinemabox_showtime_db}
+      DB_USERNAME: ${SHOWTIME_DB_USER:-showtime_user}
+      DB_PASSWORD: ${SHOWTIME_DB_PASSWORD:-123456}
+      JAVA_TOOL_OPTIONS: ${JVM_MEM_OPTS:--Xms128m -Xmx256m}
+    depends_on:
+      cinema-db:
+        condition: service_healthy
+    networks:
+      - cinema-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 25s
+    restart: unless-stopped
+
+  customer-service:
+    build:
+      context: ../services/customer-service
+      dockerfile: Dockerfile
+    container_name: cinemabox-customer
+    expose:
+      - "8082"
+    environment:
+      SERVER_PORT: 8082
+      DB_HOST: cinema-db
+      DB_PORT: 5432
+      DB_NAME: ${AUDIENCE_DB_NAME:-cinemabox_audience_db}
+      DB_USERNAME: ${AUDIENCE_DB_USER:-audience_user}
+      DB_PASSWORD: ${AUDIENCE_DB_PASSWORD:-123456}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-cinemabox-dev-secret-key-2026-at-least-32-bytes-long}
+      JWT_EXPIRED_ACCESS: ${JWT_EXPIRED_ACCESS:-86400000}
+      JAVA_TOOL_OPTIONS: ${JVM_MEM_OPTS:--Xms128m -Xmx256m}
+    depends_on:
+      cinema-db:
+        condition: service_healthy
+    networks:
+      - cinema-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 25s
+    restart: unless-stopped
+
+  ticket-service:
+    build:
+      context: ../services/ticket-service
+      dockerfile: Dockerfile
+    container_name: cinemabox-ticket
+    expose:
+      - "8084"
+    environment:
+      SERVER_PORT: 8084
+      DB_HOST: cinema-db
+      DB_PORT: 5432
+      DB_NAME: ${TICKET_DB_NAME:-cinemabox_ticket_db}
+      DB_USERNAME: ${TICKET_DB_USER:-ticket_user}
+      DB_PASSWORD: ${TICKET_DB_PASSWORD:-123456}
+      JAVA_TOOL_OPTIONS: ${JVM_MEM_OPTS:--Xms128m -Xmx256m}
+    depends_on:
+      cinema-db:
+        condition: service_healthy
+    networks:
+      - cinema-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8084/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 25s
+    restart: unless-stopped
+
+  order-service:
+    build:
+      context: ../services/order-service
+      dockerfile: Dockerfile
+    container_name: cinemabox-order
+    expose:
+      - "8083"
+    environment:
+      SERVER_PORT: 8083
+      DB_HOST: cinema-db
+      DB_PORT: 5432
+      DB_NAME: ${BOOKING_DB_NAME:-cinemabox_booking_db}
+      DB_USERNAME: ${BOOKING_DB_USER:-booking_user}
+      DB_PASSWORD: ${BOOKING_DB_PASSWORD:-123456}
+      CINEMA_SVC_HOST: cinema-service
+      CINEMA_SVC_PORT: 8081
+      CUSTOMER_SVC_HOST: customer-service
+      CUSTOMER_SVC_PORT: 8082
+      TICKET_SVC_HOST: ticket-service
+      TICKET_SVC_PORT: 8084
+      JAVA_TOOL_OPTIONS: ${JVM_MEM_OPTS:--Xms128m -Xmx256m}
+    depends_on:
+      cinema-db:
+        condition: service_healthy
+      cinema-service:
+        condition: service_healthy
+      customer-service:
+        condition: service_healthy
+      ticket-service:
+        condition: service_healthy
+    networks:
+      - cinema-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 25s
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ../services/api-gateway
+      dockerfile: Dockerfile
+    container_name: cinemabox-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_PORT: 8080
+      CINEMA_SVC_HOST: cinema-service
+      CINEMA_SVC_PORT: 8081
+      CUSTOMER_SVC_HOST: customer-service
+      CUSTOMER_SVC_PORT: 8082
+      ORDER_SVC_HOST: order-service
+      ORDER_SVC_PORT: 8083
+      TICKET_SVC_HOST: ticket-service
+      TICKET_SVC_PORT: 8084
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-cinemabox-dev-secret-key-2026-at-least-32-bytes-long}
+      JAVA_TOOL_OPTIONS: ${JVM_MEM_OPTS:--Xms128m -Xmx256m}
+    depends_on:
+      cinema-service:
+        condition: service_healthy
+      customer-service:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+      ticket-service:
+        condition: service_healthy
+    networks:
+      - cinema-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  cinema-db-data:
+
+networks:
+  cinema-net:
+    name: cinema-net
+    driver: bridge

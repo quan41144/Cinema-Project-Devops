@@ -26,6 +26,4 @@ where s.showtime.id = :showtimeId
 and (s.status = 'AVAILABLE' or (s.status = 'HELD' and s.holdExpiresAt < :now))
 """)
     Long countAvailableSeats(Long showtimeId, LocalDateTime now);
-
-    List<ShowtimeSeat> findByShowtimeIdOrderByIdAs(Long showtimeId);
 }

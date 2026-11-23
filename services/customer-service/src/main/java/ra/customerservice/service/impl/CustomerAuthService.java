@@ -27,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerAuthService implements ICustomerAuthService {
     private static final Logger log = LoggerFactory.getLogger(CustomerAuthService.class);
-    private static final BigDecimal DEFAULT_INITIAL_BALANCE = BigDecimal.valueOf(10000);
+    private static final BigDecimal DEFAULT_INITIAL_BALANCE = BigDecimal.valueOf(500000);
 
     private final CustomerRepository customerRepository;
     private final WalletTransactionRepository walletTransactionRepository;
@@ -49,6 +49,7 @@ public class CustomerAuthService implements ICustomerAuthService {
 
         CustomerWallet wallet = new CustomerWallet();
         wallet.setBalance(startBalance);
+        wallet.setCustomer(customer);
         customer.setWallet(wallet);
 
         Customer saved = customerRepository.save(customer);

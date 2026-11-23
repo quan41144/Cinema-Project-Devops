@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="SERVICE_NAME" source="spring.application.name" defaultValue="unknown-service"/>
+
+    <springProfile name="!json">
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="json">
+        <appender name="ECS_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="co.elastic.logging.logback.EcsEncoder">
+                <serviceName>${SERVICE_NAME}</serviceName>
+                <serviceVersion>1.0.0</serviceVersion>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="ECS_CONSOLE"/>
+        </root>
+    </springProfile>
+</configuration>

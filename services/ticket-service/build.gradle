@@ -35,6 +35,22 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    // Source: https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus
+    implementation("io.micrometer:micrometer-registry-prometheus:1.17.1")
+    // Source: https://mvnrepository.com/artifact/co.elastic.logging/logback-ecs-encoder
+    implementation("co.elastic.logging:logback-ecs-encoder:1.6.0")
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+tasks.named('bootJar') {
+    archiveFileName = 'ticket-service.jar'
 }
 
 tasks.named('test') {
