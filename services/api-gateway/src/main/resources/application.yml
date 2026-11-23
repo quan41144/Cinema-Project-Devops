@@ -51,3 +51,5 @@ management:
   endpoint:
     gateway:
       enabled: true
+jwt:
+  secret: ${JWT_SECRET_KEY:cinemabox-dev-secret-key-2026-at-least-32-bytes-long}

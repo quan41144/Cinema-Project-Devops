@@ -1,0 +1,25 @@
+server:
+  port: ${SERVER_PORT:8083}
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:cinema_order_db}
+    username: ${DB_USERNAME:order_user}
+    password: ${DB_PASSWORD:order_pass}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+services:
+  cinema-url: http://${CINEMA_SVC_HOST:localhost}:${CINEMA_SVC_PORT:8081}
+  customer-url: http://${CUSTOMER_SVC_HOST:localhost}:${CUSTOMER_SVC_PORT:8082}
+  ticket-url: http://${TICKET_SVC_HOST:localhost}:${TICKET_SVC_PORT:8084}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

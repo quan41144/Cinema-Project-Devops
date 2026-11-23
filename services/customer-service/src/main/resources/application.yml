@@ -1,0 +1,23 @@
+server:
+  port: ${SERVER_PORT:8082}
+
+spring:
+  application:
+    name: customer-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:cinema_customer_db}
+    username: ${DB_USERNAME:customer_user}
+    password: ${DB_PASSWORD:customer_pass}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+jwt:
+  secret: ${JWT_SECRET_KEY:cinemabox-dev-secret-key-2026-at-least-32-bytes-long}
+  expiration-ms: ${JWT_EXPIRED_ACCESS:86400000}
