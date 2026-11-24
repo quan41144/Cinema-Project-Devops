@@ -1,7 +1,7 @@
 package ra.ticketservice;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
@@ -28,12 +28,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
         "spring.datasource.password=",
         "spring.jpa.hibernate.ddl-auto=create-drop"
 })
-@RequiredArgsConstructor
 class TicketServiceApplicationTests {
-
-    private final ITicketIssuanceService ticketIssuanceService;
-    private final IShowtimeLockService showtimeLockService;
-    private final INotificationService notificationService;
+    @Autowired
+    private ITicketIssuanceService ticketIssuanceService;
+    @Autowired
+    private IShowtimeLockService showtimeLockService;
+    @Autowired
+    private INotificationService notificationService;
 
     @Test
     void contextLoads() {

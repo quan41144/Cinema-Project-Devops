@@ -40,8 +40,8 @@ public class PricingService implements IPricingService {
     @Override
     public String resolveTimeSlot(LocalTime time) {
         if (time.isBefore(LocalTime.of(12, 0))) return "BEFORE_12";
-        if (time.isBefore(LocalTime.of(17, 0))) return "12_T0_17";
-        if (time.isBefore(LocalTime.of(23, 0))) return "17_T0_23";
+        if (time.isBefore(LocalTime.of(17, 0))) return "12_TO_17";
+        if (time.isBefore(LocalTime.of(23, 0))) return "17_TO_23";
         return "AFTER_23";
     }
 }

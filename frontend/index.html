@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet" />
+    rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -46,152 +46,165 @@
 
 <body class="bg-ncc-bg text-white antialiased selection:bg-ncc-red selection:text-white min-h-screen flex flex-col">
 
-<!-- ==================== HEADER DÙNG CHUNG ==================== -->
-<header class="fixed top-0 left-0 right-0 z-50 h-16 lg:h-20 bg-[#10141B]/75 backdrop-blur-md border-b border-white/5">
-  <div class="max-w-[1440px] mx-auto h-full px-4 lg:px-[80px] flex items-center justify-between">
+  <!-- ==================== HEADER DÙNG CHUNG ==================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-16 lg:h-20 bg-[#10141B]/75 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-[1440px] mx-auto h-full px-4 lg:px-[80px] flex items-center justify-between">
 
-    <div class="flex items-center gap-3 lg:gap-12">
-      <a href="#home" class="flex items-center gap-3 flex-shrink-0">
-        <img src="https://placehold.co/70x50/10141B/EF4444?text=NCC" alt="NCC Logo"
-             class="w-[56px] h-[40px] lg:w-[70px] lg:h-[50px] object-contain rounded" />
-        <div class="flex flex-col lg:hidden">
-          <span class="text-white text-xs font-semibold leading-4">TRUNG TÂM CHIẾU PHIM QUỐC GIA</span>
-          <span class="text-white text-xs font-semibold leading-4">CinemaBox Microservices</span>
-        </div>
-      </a>
+      <div class="flex items-center gap-3 lg:gap-12">
+        <a href="#home" class="flex items-center gap-3 flex-shrink-0">
+          <img src="https://placehold.co/70x50/10141B/EF4444?text=NCC" alt="NCC Logo"
+            class="w-[56px] h-[40px] lg:w-[70px] lg:h-[50px] object-contain rounded" />
+          <div class="flex flex-col lg:hidden">
+            <span class="text-white text-xs font-semibold leading-4">TRUNG TÂM CHIẾU PHIM QUỐC GIA</span>
+            <span class="text-white text-xs font-semibold leading-4">CinemaBox Microservices</span>
+          </div>
+        </a>
 
-      <nav id="desktopNav" class="hidden lg:flex items-center gap-8 xl:gap-10 text-base font-normal leading-6">
-        <a href="#home" data-route="home" class="nav-link text-white hover:text-ncc-red transition-colors">Trang chủ</a>
-        <a href="#calendar" data-route="calendar" class="nav-link text-white hover:text-ncc-red transition-colors">Lịch chiếu</a>
-        <a href="#ticket-price" data-route="ticket-price" class="nav-link text-white hover:text-ncc-red transition-colors">Giá vé</a>
-        <button type="button" onclick="openHistoryModal()" class="text-white hover:text-ncc-red transition-colors">Lịch sử đặt vé</button>
+        <nav id="desktopNav" class="hidden lg:flex items-center gap-8 xl:gap-10 text-base font-normal leading-6">
+          <a href="#home" data-route="home" class="nav-link text-white hover:text-ncc-red transition-colors">Trang
+            chủ</a>
+          <a href="#calendar" data-route="calendar"
+            class="nav-link text-white hover:text-ncc-red transition-colors">Lịch chiếu</a>
+          <a href="#ticket-price" data-route="ticket-price"
+            class="nav-link text-white hover:text-ncc-red transition-colors">Giá vé</a>
+          <button type="button" onclick="openHistoryModal()"
+            class="text-white hover:text-ncc-red transition-colors">Lịch sử đặt vé</button>
+        </nav>
+      </div>
+
+      <!-- Desktop Auth / Wallet Area -->
+      <div id="desktopAuthArea" class="hidden lg:flex items-center gap-3"></div>
+
+      <!-- Mobile Hamburger -->
+      <button id="mobileMenuBtn" aria-label="Mở menu" class="lg:hidden p-1.5 text-white hover:text-ncc-red transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobileMenu"
+      class="hidden lg:hidden bg-[#10141B]/95 backdrop-blur-lg border-b border-white/10 px-6 py-5 space-y-4">
+      <nav id="mobileNav" class="flex flex-col space-y-3 text-base">
+        <a href="#home" data-route="home" class="nav-link text-white hover:text-ncc-red">Trang chủ</a>
+        <a href="#calendar" data-route="calendar" class="nav-link text-white hover:text-ncc-red">Lịch chiếu</a>
+        <a href="#ticket-price" data-route="ticket-price" class="nav-link text-white hover:text-ncc-red">Giá vé</a>
+        <button type="button" onclick="openHistoryModal()" class="text-left text-white hover:text-ncc-red">Lịch sử đặt
+          vé</button>
+      </nav>
+      <div id="mobileAuthArea" class="pt-3 border-t border-white/10 flex flex-col gap-3"></div>
+    </div>
+  </header>
+
+  <!-- ==================== VÙNG HIỂN THỊ NỘI DUNG ==================== -->
+  <main id="app" class="flex-1 w-full"></main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="w-full bg-ncc-dark border-t border-white/5 py-10 px-4">
+    <div class="max-w-[1440px] mx-auto flex flex-col items-center">
+      <nav
+        class="flex flex-wrap justify-center items-center gap-x-8 gap-y-3 md:gap-10 text-base font-normal leading-6 text-white mb-6">
+        <a href="#home" class="hover:text-ncc-red transition-colors">Trang chủ</a>
+        <a href="#calendar" class="hover:text-ncc-red transition-colors">Lịch chiếu</a>
+        <a href="#ticket-price" class="hover:text-ncc-red transition-colors">Giá vé</a>
+        <button type="button" onclick="openHistoryModal()" class="hover:text-ncc-red transition-colors">Lịch sử đặt
+          vé</button>
       </nav>
     </div>
+  </footer>
 
-    <!-- Desktop Auth / Wallet Area -->
-    <div id="desktopAuthArea" class="hidden lg:flex items-center gap-3"></div>
+  <!-- ==================== MODAL: ĐĂNG NHẬP / ĐĂNG KÝ (GỌI API THẬT) ==================== -->
+  <div id="authModal"
+    class="hidden fixed inset-0 z-[100] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="relative w-full max-w-md bg-[#10141B] border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl">
+      <button onclick="closeModal('authModal')"
+        class="absolute top-4 right-5 text-gray-400 hover:text-white text-2xl">&times;</button>
+      <h3 id="authModalTitle" class="text-2xl font-bold text-white mb-2">Đăng nhập</h3>
+      <p id="authModalHint" class="text-xs text-ncc-muted mb-5">Đăng nhập bằng tài khoản khán giả để đặt vé và thanh
+        toán ví.</p>
 
-    <!-- Mobile Hamburger -->
-    <button id="mobileMenuBtn" aria-label="Mở menu" class="lg:hidden p-1.5 text-white hover:text-ncc-red transition">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
-  </div>
-
-  <!-- Mobile Dropdown -->
-  <div id="mobileMenu" class="hidden lg:hidden bg-[#10141B]/95 backdrop-blur-lg border-b border-white/10 px-6 py-5 space-y-4">
-    <nav id="mobileNav" class="flex flex-col space-y-3 text-base">
-      <a href="#home" data-route="home" class="nav-link text-white hover:text-ncc-red">Trang chủ</a>
-      <a href="#calendar" data-route="calendar" class="nav-link text-white hover:text-ncc-red">Lịch chiếu</a>
-      <a href="#ticket-price" data-route="ticket-price" class="nav-link text-white hover:text-ncc-red">Giá vé</a>
-      <button type="button" onclick="openHistoryModal()" class="text-left text-white hover:text-ncc-red">Lịch sử đặt vé</button>
-    </nav>
-    <div id="mobileAuthArea" class="pt-3 border-t border-white/10 flex flex-col gap-3"></div>
-  </div>
-</header>
-
-<!-- ==================== VÙNG HIỂN THỊ NỘI DUNG ==================== -->
-<main id="app" class="flex-1 w-full"></main>
-
-<!-- ==================== FOOTER ==================== -->
-<footer class="w-full bg-ncc-dark border-t border-white/5 py-10 px-4">
-  <div class="max-w-[1440px] mx-auto flex flex-col items-center">
-    <nav class="flex flex-wrap justify-center items-center gap-x-8 gap-y-3 md:gap-10 text-base font-normal leading-6 text-white mb-6">
-      <a href="#home" class="hover:text-ncc-red transition-colors">Trang chủ</a>
-      <a href="#calendar" class="hover:text-ncc-red transition-colors">Lịch chiếu</a>
-      <a href="#ticket-price" class="hover:text-ncc-red transition-colors">Giá vé</a>
-      <button type="button" onclick="openHistoryModal()" class="hover:text-ncc-red transition-colors">Lịch sử đặt vé</button>
-    </nav>
-    <div class="max-w-[740px] text-center text-sm font-normal leading-6 text-white/80 space-y-1.5">
-      <p>Hệ thống đặt vé xem phim CinemaBox — Kiến trúc 5 Microservices (Gateway • Cinema • Customer • Order • Ticket)</p>
-      <p class="text-ncc-muted">Đồ án thực chiến DevOps • Đề tài 2 — Đặt vé xem phim</p>
-    </div>
-  </div>
-</footer>
-
-<!-- ==================== MODAL: ĐĂNG NHẬP / ĐĂNG KÝ (GỌI API THẬT) ==================== -->
-<div id="authModal" class="hidden fixed inset-0 z-[100] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="relative w-full max-w-md bg-[#10141B] border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl">
-    <button onclick="closeModal('authModal')" class="absolute top-4 right-5 text-gray-400 hover:text-white text-2xl">&times;</button>
-    <h3 id="authModalTitle" class="text-2xl font-bold text-white mb-2">Đăng nhập</h3>
-    <p id="authModalHint" class="text-xs text-ncc-muted mb-5">Đăng nhập bằng tài khoản khán giả để đặt vé và thanh toán ví.</p>
-
-    <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-      <div id="registerFields" class="hidden space-y-4">
-        <div>
-          <label class="block text-sm text-gray-300 mb-1.5">Họ và tên</label>
-          <input id="authFullName" type="text" placeholder="Nguyễn Văn A"
-                 class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
+      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+        <div id="registerFields" class="hidden space-y-4">
+          <div>
+            <label class="block text-sm text-gray-300 mb-1.5">Họ và tên</label>
+            <input id="authFullName" type="text" placeholder="Nguyễn Văn A"
+              class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
+          </div>
+          <div>
+            <label class="block text-sm text-gray-300 mb-1.5">Số điện thoại</label>
+            <input id="authPhone" type="text" placeholder="0901234567"
+              class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
+          </div>
         </div>
         <div>
-          <label class="block text-sm text-gray-300 mb-1.5">Số điện thoại</label>
-          <input id="authPhone" type="text" placeholder="0901234567"
-                 class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
+          <label class="block text-sm text-gray-300 mb-1.5">Email</label>
+          <input id="authEmail" type="email" required placeholder="a@cinemabox.vn"
+            class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
         </div>
-      </div>
-      <div>
-        <label class="block text-sm text-gray-300 mb-1.5">Email</label>
-        <input id="authEmail" type="email" required placeholder="a@cinemabox.vn"
-               class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
-      </div>
-      <div>
-        <label class="block text-sm text-gray-300 mb-1.5">Mật khẩu (tối thiểu 6 ký tự)</label>
-        <input id="authPassword" type="password" required minlength="6" placeholder="••••••••"
-               class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
-      </div>
-      <button type="submit" id="authSubmitBtn"
-              class="w-full h-11 btn-login-gradient rounded-full text-sm font-semibold text-white mt-2">
-        Đăng nhập
-      </button>
-    </form>
-  </div>
-</div>
-
-<!-- ==================== MODAL: LỊCH SỬ ĐẶT VÉ ==================== -->
-<div id="historyModal" class="hidden fixed inset-0 z-[100] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="relative w-full max-w-2xl bg-[#11151C] border border-white/10 rounded-2xl p-6 shadow-2xl max-h-[82vh] flex flex-col">
-    <div class="flex items-center justify-between pb-4 border-b border-white/10">
-      <div>
-        <h3 class="text-lg font-bold text-white">Lịch sử đặt vé của bạn</h3>
-        <p class="text-xs text-ncc-muted mt-0.5">Nguồn: <code>GET /api/v1/orders?customerId=...</code></p>
-      </div>
-      <button onclick="closeModal('historyModal')" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
-    </div>
-    <div id="historyListContainer" class="mt-4 space-y-3 overflow-y-auto pr-1"></div>
-  </div>
-</div>
-
-<!-- ==================== MODAL: CHI TIẾT NỘI DUNG PHIM ==================== -->
-<div id="contentModal" class="hidden fixed inset-0 z-[100] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="relative w-full max-w-xl bg-[#1A1D23] border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl">
-    <button onclick="closeModal('contentModal')" class="absolute top-4 right-5 text-gray-400 hover:text-white text-2xl">&times;</button>
-    <h3 class="text-xl font-bold text-white mb-4">Chi tiết nội dung</h3>
-    <p id="fullSynopsisText" class="text-sm leading-6 text-gray-200"></p>
-  </div>
-</div>
-
-<!-- ==================== MODAL: XEM TRAILER ==================== -->
-<div id="trailerModal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="relative w-full max-w-3xl bg-[#10141B] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-    <div class="flex items-center justify-between px-5 py-3.5 border-b border-white/10">
-      <h3 id="trailerTitle" class="text-base font-bold text-white">Trailer</h3>
-      <button onclick="closeModal('trailerModal')" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
-    </div>
-    <div class="aspect-video w-full bg-black flex items-center justify-center">
-      <iframe id="trailerIframe" class="w-full h-full" src="" title="Movie Trailer" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
+        <div>
+          <label class="block text-sm text-gray-300 mb-1.5">Mật khẩu (tối thiểu 6 ký tự)</label>
+          <input id="authPassword" type="password" required minlength="6" placeholder="••••••••"
+            class="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-ncc-red" />
+        </div>
+        <button type="submit" id="authSubmitBtn"
+          class="w-full h-11 btn-login-gradient rounded-full text-sm font-semibold text-white mt-2">
+          Đăng nhập
+        </button>
+      </form>
     </div>
   </div>
-</div>
 
-<!-- ==================== TOAST THÔNG BÁO ==================== -->
-<div id="toastNotice"
-     class="hidden fixed bottom-6 right-6 z-[110] bg-[#1A1D23] border border-white/15 text-white text-sm px-5 py-3 rounded-xl shadow-2xl">
-</div>
+  <!-- ==================== MODAL: LỊCH SỬ ĐẶT VÉ ==================== -->
+  <div id="historyModal"
+    class="hidden fixed inset-0 z-[100] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div
+      class="relative w-full max-w-2xl bg-[#11151C] border border-white/10 rounded-2xl p-6 shadow-2xl max-h-[82vh] flex flex-col">
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <div>
+          <h3 class="text-lg font-bold text-white">Lịch sử đặt vé</h3>
+        </div>
+        <button onclick="closeModal('historyModal')"
+          class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <div id="historyListContainer" class="mt-4 space-y-3 overflow-y-auto pr-1"></div>
+    </div>
+  </div>
 
-<script src="js/app.js"></script>
+  <!-- ==================== MODAL: CHI TIẾT NỘI DUNG PHIM ==================== -->
+  <div id="contentModal"
+    class="hidden fixed inset-0 z-[100] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="relative w-full max-w-xl bg-[#1A1D23] border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl">
+      <button onclick="closeModal('contentModal')"
+        class="absolute top-4 right-5 text-gray-400 hover:text-white text-2xl">&times;</button>
+      <h3 class="text-xl font-bold text-white mb-4">Chi tiết nội dung</h3>
+      <p id="fullSynopsisText" class="text-sm leading-6 text-gray-200"></p>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: XEM TRAILER ==================== -->
+  <div id="trailerModal"
+    class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="relative w-full max-w-3xl bg-[#10141B] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="flex items-center justify-between px-5 py-3.5 border-b border-white/10">
+        <h3 id="trailerTitle" class="text-base font-bold text-white">Trailer</h3>
+        <button onclick="closeModal('trailerModal')"
+          class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <div class="aspect-video w-full bg-black flex items-center justify-center">
+        <iframe id="trailerIframe" class="w-full h-full" src="" title="Movie Trailer" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST THÔNG BÁO ==================== -->
+  <div id="toastNotice"
+    class="hidden fixed bottom-6 right-6 z-[110] bg-[#1A1D23] border border-white/15 text-white text-sm px-5 py-3 rounded-xl shadow-2xl">
+  </div>
+
+  <script src="js/app.js"></script>
 </body>
 
 </html>

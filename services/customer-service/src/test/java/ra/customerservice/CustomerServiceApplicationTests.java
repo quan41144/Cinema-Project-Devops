@@ -1,7 +1,7 @@
 package ra.customerservice;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-@RequiredArgsConstructor
 @TestPropertySource(properties = {
 		"spring.datasource.url=jdbc:h2:mem:customer_test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1",
 		"spring.datasource.driver-class-name=org.h2.Driver",
@@ -25,8 +24,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 })
 class CustomerServiceApplicationTests {
 
-	private final ICustomerAuthService customerAuthService;
-	private final IWalletService walletService;
+	@Autowired
+	private ICustomerAuthService customerAuthService;
+
+	@Autowired
+	private IWalletService walletService;
 
 	@Test
 	void contextLoads() {

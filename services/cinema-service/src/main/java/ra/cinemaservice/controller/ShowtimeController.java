@@ -22,7 +22,7 @@ public class ShowtimeController {
     @GetMapping
     public List<ShowtimeSummaryDto> listShowtimes(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam(required = false) long movieId
+            @RequestParam(required = false) Long movieId
             ){
         return showtimeService.findShowtimes(date, movieId);
     }

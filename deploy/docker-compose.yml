@@ -60,7 +60,8 @@ services:
       DB_USERNAME: ${AUDIENCE_DB_USER:-audience_user}
       DB_PASSWORD: ${AUDIENCE_DB_PASSWORD:-123456}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-cinemabox-dev-secret-key-2026-at-least-32-bytes-long}
-      JWT_EXPIRED_ACCESS: ${JWT_EXPIRED_ACCESS:-86400000}
+      JWT_EXPIRED_ACCESS: ${JWT_EXPIRED_ACCESS:-900000}
+      JWT_EXPIRED_REFRESH: ${JWT_EXPIRED_REFRESH:-604800000}
       JAVA_TOOL_OPTIONS: ${JVM_MEM_OPTS:--Xms128m -Xmx256m}
     depends_on:
       cinema-db:

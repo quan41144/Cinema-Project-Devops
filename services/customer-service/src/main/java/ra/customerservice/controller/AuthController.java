@@ -4,9 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ra.customerservice.dto.AuthResponse;
-import ra.customerservice.dto.LoginRequest;
-import ra.customerservice.dto.RegisterRequest;
+import ra.customerservice.dto.*;
 import ra.customerservice.service.ICustomerAuthService;
 
 @RestController
@@ -22,5 +20,19 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest req) {
         return authService.loginWithToken(req);
+    }
+    @PostMapping("/refresh")
+    public AuthResponse refresh(@Valid @RequestBody RefreshTokenRequest req) {
+        return authService.refreshToken(req);
+    }
+
+    @PostMapping("/logout")
+    public MessageResponse logout(@RequestBody(required = false) LogoutRequest req) {
+        return authService.logout(req);
+    }
+
+    @PostMapping("/logout-all")
+    public MessageResponse logoutAll(@RequestHeader("X-User-Id") Long userId) {
+        return authService.logoutAll(userId);
     }
 }

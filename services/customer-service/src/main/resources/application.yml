@@ -29,4 +29,5 @@ management:
         http.server.requests: true
 jwt:
   secret: ${JWT_SECRET_KEY:cinemabox-dev-secret-key-2026-at-least-32-bytes-long}
-  expiration-ms: ${JWT_EXPIRED_ACCESS:86400000}
+  expiration-ms: ${JWT_EXPIRED_ACCESS:900000}
+  refresh-expiration-ms: ${JWT_EXPIRED_REFRESH:604800000}

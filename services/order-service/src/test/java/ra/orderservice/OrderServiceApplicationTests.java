@@ -3,8 +3,8 @@ package ra.orderservice;
 import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -38,9 +38,9 @@ import static org.mockito.Mockito.*;
         "spring.datasource.password=",
         "spring.jpa.hibernate.ddl-auto=create-drop"
 })
-@RequiredArgsConstructor
 class OrderServiceApplicationTests {
-    private final IOrderSagaService orderSagaService;
+    @Autowired
+    private IOrderSagaService orderSagaService;
 
     @MockitoBean
     private CinemaClient cinemaClient;

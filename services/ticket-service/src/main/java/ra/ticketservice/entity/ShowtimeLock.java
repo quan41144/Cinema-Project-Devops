@@ -16,10 +16,12 @@ import java.time.LocalDateTime;
 @Builder
 public class ShowtimeLock {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "showtime_id")
     private Long showtimeId;
+    @Builder.Default
     @Column(name = "is_locked", nullable = false)
     private boolean locked = false;
+    @Builder.Default
     @Column(name = "lock_reason", nullable = false, length = 255)
     private String lockReason = "Suất chiếu đã khoá trước giờ chiếu";
     @Column(name = "updated_at", nullable = false)
@@ -28,5 +30,8 @@ public class ShowtimeLock {
     @PreUpdate
     void onTouch() {
         this.updatedAt = LocalDateTime.now();
+        if (this.lockReason == null || this.lockReason.isBlank()) {
+            this.lockReason = "Suất chiếu đã khoá trước giờ chiếu";
+        }
     }
 }

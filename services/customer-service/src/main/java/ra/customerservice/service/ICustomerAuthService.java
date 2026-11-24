@@ -1,9 +1,6 @@
 package ra.customerservice.service;
 
-import ra.customerservice.dto.AuthResponse;
-import ra.customerservice.dto.CustomerResponse;
-import ra.customerservice.dto.LoginRequest;
-import ra.customerservice.dto.RegisterRequest;
+import ra.customerservice.dto.*;
 import ra.customerservice.entity.Customer;
 
 import java.util.List;
@@ -16,4 +13,7 @@ public interface ICustomerAuthService {
     CustomerResponse toResponse(Customer c);
     AuthResponse registerWithToken(RegisterRequest req);
     AuthResponse loginWithToken(LoginRequest req);
+    AuthResponse refreshToken(RefreshTokenRequest req);
+    MessageResponse logout(LogoutRequest req);
+    MessageResponse logoutAll(Long customerId);
 }

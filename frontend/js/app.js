@@ -688,7 +688,6 @@ function buildTicketPriceView() {
     <div class="max-w-[1440px] mx-auto px-4 xl:px-[80px] pt-[104px] lg:pt-[128px] pb-16">
       <div class="text-center mb-10">
         <h1 class="text-white text-2xl font-bold">Giá vé</h1>
-        <p class="text-ncc-muted text-sm mt-1.5">(Dữ liệu trực tiếp từ <code>GET /api/v1/prices</code> — <code>cinema-service</code>)</p>
       </div>
       <section class="mb-10 lg:p-6 lg:bg-ncc-dark lg:rounded-2xl lg:border lg:border-ncc-red lg:price-card-shadow">
         <h2 class="text-white text-lg font-semibold mb-4">1. GIÁ VÉ XEM PHIM 2D</h2>

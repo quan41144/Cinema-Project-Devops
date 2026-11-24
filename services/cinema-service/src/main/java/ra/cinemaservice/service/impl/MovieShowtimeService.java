@@ -67,6 +67,7 @@ public class MovieShowtimeService implements IMovieShowtimeService {
         detail.setSynopsisFull(req.synopsisFull());
         detail.setTrailerUrl(req.trailerUrl());
         detail.setRatingDescription(req.ratingDescription());
+        detail.setMovie(movie);
         movie.setDetail(detail);
 
         return toMovieDetail(movieRepository.save(movie));

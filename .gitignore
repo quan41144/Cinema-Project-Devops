@@ -4,4 +4,8 @@
 *.iml
 .DS_Store
 deploy/.env
-*.env.backup
+*.env.backupdeploy/.env
+*.pem
+.gradle/
+build/
+.idea/
