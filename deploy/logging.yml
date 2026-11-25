@@ -1,0 +1,44 @@
+services:
+  cinema-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: json
+      SPRING_MAIN_BANNER_MODE: "off"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "true"
+        tag: "cinemabox.cinema"
+
+  customer-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: json
+      SPRING_MAIN_BANNER_MODE: "off"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "true"
+        tag: "cinemabox.customer"
+
+  order-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: json
+      SPRING_MAIN_BANNER_MODE: "off"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "true"
+        tag: "cinemabox.order"
+
+  ticket-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: json
+      SPRING_MAIN_BANNER_MODE: "off"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "true"
+        tag: "cinemabox.ticket"
