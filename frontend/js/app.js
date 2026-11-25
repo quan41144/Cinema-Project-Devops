@@ -21,7 +21,6 @@ const appState = {
   movieShowtimes: [],
   detailDate: null,
   seatMap: null,
-  isShowtimeLocked: false,
   selectedSeats: [], // [{ seatCode, seatType, price }]
   lastResult: null,
   timers: { heroInterval: null, seatInterval: null, toastTimeout: null },
@@ -296,11 +295,7 @@ async function openMovieDetail(movieId) {
 
 async function openChooseTicket(showtimeId, movieId = null) {
   try {
-    const reqs = [
-      apiFetch(`/api/v1/showtimes/${showtimeId}/seats`),
-      apiFetch(`/api/v1/tickets/locks/${showtimeId}`).catch(() => ({ data: { locked: false } })),
-    ];
-    const [{ data: seatMap }, { data: lockInfo }] = await Promise.all(reqs);
+    const { data: seatMap } = await apiFetch(`/api/v1/showtimes/${showtimeId}/seats`);
 
     const targetMovieId = movieId || seatMap.movieId;
     if (!appState.selectedMovie || appState.selectedMovie.id !== targetMovieId) {
@@ -314,7 +309,6 @@ async function openChooseTicket(showtimeId, movieId = null) {
 
     appState.seatMap = seatMap;
     appState.detailDate = seatMap.showDate;
-    appState.isShowtimeLocked = !!lockInfo?.locked;
     appState.selectedSeats = [];
 
     if (appState.currentRoute === "choose-ticket") renderCurrentRoute();
@@ -818,21 +812,6 @@ function buildChooseTicketView() {
       <div id="seatShowtimeGrid" class="max-w-[896px] mx-auto grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2.5 md:gap-4"></div>
     </section>
 
-    <!-- CÔNG TẮC KHOÁ SUẤT CHIẾU (ĐIỀU KHIỂN SỰ CỐ TICKET-SERVICE) -->
-    <section class="max-w-[928px] mx-auto px-4 pb-5 hidden">
-      <div id="lockBox" class="max-w-[896px] mx-auto px-5 py-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="text-xs md:text-sm">
-          <div class="font-bold text-white">Công tắc sự cố (<code>PUT /api/v1/tickets/locks/${sm.showtimeId}</code>)</div>
-          <p class="text-ncc-muted mt-0.5">Bật để <code>ticket-service</code> từ chối xuất vé ("Suất chiếu đã khoá trước giờ chiếu") và kích hoạt hoàn tiền Saga.</p>
-        </div>
-        <label class="inline-flex items-center gap-3 cursor-pointer select-none flex-shrink-0">
-          <input type="checkbox" id="lockToggleInput" class="sr-only peer" ${appState.isShowtimeLocked ? "checked" : ""} onchange="handleToggleLock(this.checked)" />
-          <div class="relative w-11 h-6 bg-slate-700 rounded-full peer peer-checked:bg-ncc-red after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
-          <span id="lockToggleLabel" class="text-xs md:text-sm font-bold"></span>
-        </label>
-      </div>
-    </section>
-
     <section class="max-w-[928px] mx-auto px-4 pb-8 lg:pb-12">
       <div class="flex max-w-[896px] mx-auto px-5 py-3 bg-zinc-900 rounded-xl border border-white/10 justify-between items-center mb-4 text-sm md:text-base font-bold">
         <div>Giờ chiếu: <span class="text-ncc-red">${formatTimeShort(sm.startTime)}</span> <span class="text-ncc-muted font-normal text-xs ml-1">(${formatDateSlash(sm.showDate)})</span></div>
@@ -891,41 +870,6 @@ function buildChooseTicketView() {
     </section>`;
 }
 
-function updateLockBoxUI() {
-  const box = document.getElementById("lockBox");
-  const label = document.getElementById("lockToggleLabel");
-  const input = document.getElementById("lockToggleInput");
-  if (!box || !label) return;
-  const locked = appState.isShowtimeLocked;
-  if (input) input.checked = locked;
-  label.textContent = locked ? "ĐANG KHOÁ XUẤT VÉ" : "Đang mở xuất vé";
-  label.className = `text-xs md:text-sm font-bold ${locked ? "text-red-400" : "text-green-400"}`;
-  box.className = `max-w-[896px] mx-auto px-5 py-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-      locked ? "bg-red-500/10 border-red-500/50" : "bg-zinc-900 border-white/10"
-  }`;
-}
-
-async function handleToggleLock(locked) {
-  if (!appState.token) {
-    document.getElementById("lockToggleInput").checked = appState.isShowtimeLocked;
-    showToast("Vui lòng đăng nhập trước khi bật/tắt khoá suất chiếu.");
-    openAuthModal("login");
-    return;
-  }
-  try {
-    await apiFetch(`/api/v1/tickets/locks/${appState.seatMap.showtimeId}`, {
-      method: "PUT",
-      body: JSON.stringify({ locked, reason: "Suất chiếu đã khoá trước giờ chiếu" }),
-    });
-    appState.isShowtimeLocked = locked;
-    updateLockBoxUI();
-    showToast(locked ? "Đã BẬT khoá suất chiếu (sẽ hoàn tiền & trả CANCELLED)" : "Đã MỞ khoá suất chiếu.");
-  } catch (err) {
-    document.getElementById("lockToggleInput").checked = appState.isShowtimeLocked;
-    showToast("Lỗi gọi ticket-service: " + err.message);
-  }
-}
-
 function initChooseTicketView() {
   const dates = [...new Set(appState.movieShowtimes.map((s) => s.showDate))].sort();
   document.getElementById("seatDateTabs").innerHTML = dates
@@ -943,7 +887,6 @@ function initChooseTicketView() {
       .map((s) => `<button onclick="openChooseTicket(${s.id}, ${s.movieId})" class="h-10 rounded-full border text-sm font-bold ${s.id === appState.seatMap.showtimeId ? "bg-gray-800 border-ncc-red text-white" : "border-ncc-border text-white hover:bg-gray-800/60"}">${formatTimeShort(s.startTime)}</button>`)
       .join("");
 
-  updateLockBoxUI();
   renderSeatMap();
   updateSeatSummary();
   startSeatCountdown();
@@ -1096,7 +1039,6 @@ function buildPaymentView() {
               </div>
             </div>
 
-            ${appState.isShowtimeLocked ? `<div class="p-3.5 rounded-xl bg-orange-500/10 border border-orange-500/40 text-xs text-orange-200 leading-5"><strong class="text-ncc-orange">Sự cố khoá suất chiếu đang BẬT:</strong> Hệ thống sẽ trừ ví, nhận từ chối từ <code>ticket-service</code>, tự động hoàn tiền (Saga) và trả trạng thái <strong>CANCELLED</strong>.</div>` : ""}
             ${lowBalance ? `<div class="p-3 rounded-xl bg-red-500/10 border border-red-500/40 text-xs text-red-300">Số dư ví không đủ để thanh toán đơn này.</div>` : ""}
 
             <div class="space-y-2.5 pt-1">
