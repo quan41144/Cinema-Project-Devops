@@ -819,7 +819,7 @@ function buildChooseTicketView() {
     </section>
 
     <!-- CÔNG TẮC KHOÁ SUẤT CHIẾU (ĐIỀU KHIỂN SỰ CỐ TICKET-SERVICE) -->
-    <section class="max-w-[928px] mx-auto px-4 pb-5">
+    <section class="max-w-[928px] mx-auto px-4 pb-5 hidden">
       <div id="lockBox" class="max-w-[896px] mx-auto px-5 py-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="text-xs md:text-sm">
           <div class="font-bold text-white">Công tắc sự cố (<code>PUT /api/v1/tickets/locks/${sm.showtimeId}</code>)</div>

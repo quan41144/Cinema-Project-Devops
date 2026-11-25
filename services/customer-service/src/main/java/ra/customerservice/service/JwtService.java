@@ -33,11 +33,15 @@ public class JwtService {
     public String generateToken(Customer customer) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + accessExpirationMs);
+        String role = (customer.getRole() != null && !customer.getRole().isBlank())
+                ? customer.getRole().trim().toUpperCase()
+                : "CUSTOMER";
         return Jwts.builder()
                 .id(UUID.randomUUID().toString())
                 .subject(String.valueOf(customer.getId()))
                 .claim("email", customer.getEmail())
                 .claim("name", customer.getFullName())
+                .claim("role", role)
                 .claim("type", "access")
                 .issuedAt(now)
                 .expiration(expiry)

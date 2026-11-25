@@ -28,12 +28,17 @@ public class Customer {
     private String phone;
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+    @Column(name = "role", length = 20, columnDefinition = "varchar(20) default 'CUSTOMER'")
+    private String role = "CUSTOMER";
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private CustomerWallet wallet;
     @PrePersist
     void onCreate() {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now();
+        }
+        if (this.role == null || this.role.isBlank()) {
+            this.role = "CUSTOMER";
         }
     }
 }

@@ -1,3 +1,12 @@
+INSERT INTO customers (full_name, email, password_hash, phone, role, created_at)
+VALUES (
+    'admin',
+    'huynguyen51144@gmail.com',
+    '$2a$12$lPWPVFbMPRmBLobFvgQcAO4JT1yqkHVVf8Gj8jHVPHcefZLIXX2Xi',
+    '0900000000',
+    'ADMIN',
+    NOW()
+) ON CONFLICT (email) DO UPDATE SET role = 'ADMIN';
 INSERT INTO categories (name, slug) VALUES
                                         ('Hài', 'hai'),
                                         ('Hành động', 'hanh-dong'),

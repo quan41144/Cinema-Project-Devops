@@ -79,16 +79,28 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
                     .getPayload();
             String jti = claims.getId();
             String userId = claims.getSubject();
+            String role = claims.get("role", String.class);
+            if (role == null || role.isBlank()) {
+                role = "CUSTOMER";
+            }
             Instant issuedAt = claims.getIssuedAt() != null ? claims.getIssuedAt().toInstant() : null;
 
             if (blacklistStore.isRevoked(jti, userId, issuedAt)) {
                 return writeJsonError(exchange, HttpStatus.UNAUTHORIZED, "Phiên đăng nhập đã đăng xuất hoặc bị thu hồi");
             }
 
+            if (isAdminEndpoint(method, path) && !"ADMIN".equalsIgnoreCase(role)) {
+                return writeJsonError(exchange, HttpStatus.FORBIDDEN,
+                        "Bạn không có quyền thực hiện thao tác quản trị này");
+            }
+
+            final String resolvedRole = role.toUpperCase();
+
             ServerHttpRequest mutatedReq = request.mutate()
                     .headers(h -> {
                         h.set("X-User-Id", userId);
                         h.set("X-User-Email", String.valueOf(claims.get("email")));
+                        h.set("X-User-Role", resolvedRole);
                     })
                     .build();
             ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedReq).build();
@@ -109,6 +121,30 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
         catch (JwtException | IllegalArgumentException e) {
             return writeJsonError(exchange, HttpStatus.UNAUTHORIZED, "JWT token không hợp lệ hoặc đã hết hạn");
         }
+    }
+
+    private boolean isAdminEndpoint(HttpMethod method, String path) {
+        boolean isWriteMethod = HttpMethod.POST.equals(method)
+                || HttpMethod.PUT.equals(method)
+                || HttpMethod.PATCH.equals(method)
+                || HttpMethod.DELETE.equals(method);
+
+        if (path.startsWith("/api/v1/tickets/locks")) {
+            return true;
+        }
+        if (HttpMethod.POST.equals(method) && path.endsWith("/wallet/topup")) {
+            return true;
+        }
+        if (isWriteMethod && (path.startsWith("/api/v1/movies")
+                || path.startsWith("/api/v1/categories")
+                || path.startsWith("/api/v1/showtimes")
+                || path.startsWith("/api/v1/prices"))) {
+            return true;
+        }
+        if (HttpMethod.GET.equals(method) && (path.equals("/api/v1/customers") || path.equals("/api/v1/customers/"))) {
+            return true;
+        }
+        return false;
     }
 
     private Claims tryParseClaims(String authHeader) {
